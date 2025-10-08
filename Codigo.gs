@@ -3,7 +3,7 @@ function doGet() {
     .setTitle('Daily Class Report');
 }
 
-// ID da pasta raiz onde serão salvos os relatórios
+// ID of the root folder where reports will be saved
 const ROOT_FOLDER_ID = '1CM15DCyL0W-RRxpW-ld7Pz-cdNYOSKza';
 
 function submitForm(formData) {
@@ -11,7 +11,7 @@ function submitForm(formData) {
     const rootFolder = DriveApp.getFolderById(ROOT_FOLDER_ID);
     const schoolFolder = getOrCreateFolder(formData.school, rootFolder);
 
-    // Semana ISO
+    // ISO Week
     const now = new Date();
     const weekNumber = getWeekNumber(now);
     const weekFolderName = `${now.getFullYear()}-W${weekNumber}`;
@@ -30,7 +30,7 @@ function submitForm(formData) {
       ]);
     }
 
-    // Upload das fotos (se houver)
+    // Photo upload (if any)
     let photoLinks = [];
     if (formData.photos && formData.photos.length > 0) {
       const photoFolder = getOrCreateFolder('Photos', weekFolder);
@@ -59,16 +59,16 @@ function submitForm(formData) {
       photoLinks.join('\n')
     ]);
 
-    return { success: true, message: '✅ Formulário e fotos enviados com sucesso!' };
+    return { success: true, message: '✅ Form and photos sent successfully!' };
 
   } catch (err) {
-    Logger.log('Erro no submitForm: ' + err);
-    return { success: false, message: '❌ Erro ao enviar: ' + err };
+    Logger.log('Error in submitForm: ' + err);
+    return { success: false, message: '❌ Error sending: ' + err };
   }
 }
 
 
-// === Funções auxiliares ===
+// === Helper functions ===
 function getOrCreateFolder(name, parent) {
   const folders = parent.getFoldersByName(name);
   if (folders.hasNext()) return folders.next();

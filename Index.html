@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Formulário de Aula</title>
+    <title>Class Form</title>
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -71,7 +71,7 @@
   </head>
 
   <body>
-    <h2>📘 Registro de Aula</h2>
+    <h2>📘 Class Record</h2>
     <form id="lessonForm">
       <label for="classDate">📅 Class Date:</label>
       <input type="date" id="classDate" name="classDate" required>
@@ -96,10 +96,10 @@
       <label for="subject">🧠 Subject:</label>
       <input type="text" id="subject" name="subject" required>
 
-      <label for="content">📝 Content class:</label>
+      <label for="content">📝 Class content:</label>
       <textarea id="content" name="content" rows="3" required></textarea>
 
-      <label for="numStudents">👨‍👩‍👧‍👦 Students attendace:</label>
+      <label for="numStudents">👨‍👩‍👧‍👦 Student attendance:</label>
       <input type="number" id="numStudents" name="numStudents" min="0" required>
 
       <div id="studentsContainer"></div>
@@ -110,7 +110,7 @@
       <label for="photoUpload">📷 Upload photos:</label>
       <input type="file" id="photoUpload" name="photoUpload" accept="image/*" multiple>
 
-      <button type="submit">Send forms</button>
+      <button type="submit">Send form</button>
     </form>
 
     <script>
@@ -118,7 +118,7 @@
       const studentsContainer = document.getElementById('studentsContainer');
       const numStudentsInput = document.getElementById('numStudents');
 
-      // Cria campos dinâmicos conforme número de alunos
+      // Creates dynamic fields according to number of students
       numStudentsInput.addEventListener('change', () => {
         studentsContainer.innerHTML = '';
         const count = parseInt(numStudentsInput.value || 0);
@@ -140,17 +140,17 @@
         }
       });
 
-      // Envio do formulário
+      // Form submission
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData(form);
 
-        // Converte campos para objeto
+        // Converts fields to object
         const data = Object.fromEntries(formData.entries());
 
         google.script.run
           .withSuccessHandler(msg => alert(msg))
-          .withFailureHandler(err => alert('Erro: ' + err))
+          .withFailureHandler(err => alert('Error: ' + err))
           .submitForm(data);
       });
     </script>
