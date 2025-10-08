@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Formulário de Aula</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 30px;
+        background: #fafafa;
+        color: #333;
+      }
+
+      h2 {
+        text-align: center;
+        color: #5a2d82;
+      }
+
+      form {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-top: 12px;
+        font-weight: 600;
+      }
+
+      input, select, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      input:focus, textarea:focus {
+        outline: none;
+        border-color: #6c2bd9;
+        box-shadow: 0 0 4px rgba(108,43,217,0.3);
+      }
+
+      button {
+        background-color: #6c2bd9;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      button:hover {
+        background-color: #5a22b0;
+      }
+
+      .student-entry {
+        background: #f7f4fc;
+        padding: 10px;
+        margin-top: 8px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>📘 Registro de Aula</h2>
+    <form id="lessonForm">
+      <label for="classDate">📅 Class Date:</label>
+      <input type="date" id="classDate" name="classDate" required>
+
+      <label for="teacher">👩‍🏫 Teacher:</label>
+      <input type="text" id="teacher" name="teacher" required>
+
+     <label for="school">🏫 School:</label>
+      <select id="school" name="school" required>
+        <option value="" disabled selected>Select a school</option>
+        <option value="Butterfly Secondary School">Butterfly Secondary School</option>
+        <option value="Rising Sun Elementary">Rising Sun Elementary</option>
+        <option value="Blue Lake Middle School">Blue Lake Middle School</option>
+        <option value="Evergreen Academy">Evergreen Academy</option>
+        <option value="Golden Valley High">Golden Valley High</option>
+      </select>
+
+
+      <label for="grade">📚 Class/Grade:</label>
+      <input type="text" id="grade" name="grade" required>
+
+      <label for="subject">🧠 Subject:</label>
+      <input type="text" id="subject" name="subject" required>
+
+      <label for="content">📝 Content class:</label>
+      <textarea id="content" name="content" rows="3" required></textarea>
+
+      <label for="numStudents">👨‍👩‍👧‍👦 Students attendace:</label>
+      <input type="number" id="numStudents" name="numStudents" min="0" required>
+
+      <div id="studentsContainer"></div>
+
+      <label for="notes">💬 Student observations:</label>
+      <textarea id="notes" name="notes" rows="3"></textarea>
+
+      <label for="photoUpload">📷 Upload photos:</label>
+      <input type="file" id="photoUpload" name="photoUpload" accept="image/*" multiple>
+
+      <button type="submit">Send forms</button>
+    </form>
+
+    <script>
+      const form = document.getElementById('lessonForm');
+      const studentsContainer = document.getElementById('studentsContainer');
+      const numStudentsInput = document.getElementById('numStudents');
+
+      // Cria campos dinâmicos conforme número de alunos
+      numStudentsInput.addEventListener('change', () => {
+        studentsContainer.innerHTML = '';
+        const count = parseInt(numStudentsInput.value || 0);
+        for (let i = 1; i <= count; i++) {
+          const div = document.createElement('div');
+          div.className = 'student-entry';
+          div.innerHTML = `
+            <label>Student ${i} - Name:</label>
+            <input type="text" name="studentName${i}" required>
+            <label>Attendance:</label>
+            <select name="studentPresent${i}">
+              <option value="Present">Present</option>
+              <option value="Partial absent">Partial absent</option>
+            </select>
+            <label>Observations:</label>
+            <textarea name="studentNote${i}" rows="2"></textarea>
+          `;
+          studentsContainer.appendChild(div);
+        }
+      });
+
+      // Envio do formulário
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        // Converte campos para objeto
+        const data = Object.fromEntries(formData.entries());
+
+        google.script.run
+          .withSuccessHandler(msg => alert(msg))
+          .withFailureHandler(err => alert('Erro: ' + err))
+          .submitForm(data);
+      });
+    </script>
+  </body>
+</html>
