@@ -5,12 +5,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <base target="_top" />
-  <title>Class Report Form</title>
+  <title>Class Assessment Form</title>
   <style>
     :root {
       --blue: #0056b3;
       --orange: #ff7b00;
-      --orange-dark: #e36d00;
       --gray-bg: #f8fafc;
       --border: #d1d5db;
     }
@@ -22,7 +21,6 @@
       color: #111827;
     }
 
-    /* ===== HEADER ===== */
     .header {
       display: flex;
       justify-content: space-between;
@@ -30,7 +28,6 @@
       background-color: #fff;
       padding: 14px 20px;
       border-bottom: 3px solid var(--orange);
-      flex-wrap: wrap;
     }
 
     .header h1 {
@@ -42,223 +39,95 @@
 
     .header img {
       height: 50px;
-      width: auto;
-      object-fit: contain;
-      margin-top: 8px;
     }
 
-    /* ===== CONTAINER ===== */
-    .container {
-      max-width: 1200px;
-      /* 🔹 mais largo no desktop */
-      width: 95%;
-      /* 🔹 usa até 95% da tela */
-      background-color: #fff;
-      margin: 40px auto;
-      padding: 40px 48px;
-      border-radius: 14px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      transition: all 0.2s ease-in-out;
-    }
-
-    /* 🔸 layout ajustável em telas menores */
-    @media (max-width: 768px) {
-      .container {
-        width: 95%;
-        padding: 24px;
-        margin: 20px auto;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-        /* 🔹 empilha campos no celular */
-      }
-    }
+  .container {
+    max-width: 1400px; /* 👈 aumentei de 1200px */
+    width: 97%;
+    background-color: #fff;
+    margin: 40px auto;
+    padding: 50px 60px; /* 👈 mais espaço interno */
+    border-radius: 16px;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
+  }
 
 
-    h2 {
-      display: flex;
-      align-items: center;
-      font-size: 1.2em;
-      color: var(--blue);
-      margin-bottom: 12px;
-    }
+  h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+  color: var(--blue);
+  margin-bottom: 12px;
+  font-weight: 700;
+  }
 
-    h2::before {
-      content: "▍";
-      color: var(--blue);
-      margin-right: 8px;
-      font-size: 1.4em;
-    }
+/* 🔹 Restaura a barrinha decorativa azul à esquerda dos títulos */
+  h2::before {
+  content: "▍";
+  color: var(--blue);
+  margin-right: 8px;
+  font-size: 1.4em;
+  line-height: 1;
+  }
 
-    /* ===== FORM FIELDS ===== */
+
     label {
-      display: block;
-      margin-top: 16px;
       font-weight: 600;
-      font-size: 0.95em;
-      color: #1f2937;
+      margin-top: 10px;
+      display: block;
     }
 
-    input[type="text"],
-    input[type="date"],
-    textarea,
-    select {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      background-color: #fff;
-      font-family: "Inter", "Segoe UI", sans-serif !important;
-      font-size: 0.95em;
-      color: #000;
-      box-sizing: border-box;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    input[type="text"]:focus,
-    input[type="date"]:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
-    }
-
-    input[type="date"] {
-      padding-right: 6px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    /* ===== GRID ===== */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
 
     .full {
       grid-column: 1 / 3;
     }
 
-    /* RESPONSIVE GRID */
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-      }
-
-      .full {
-        grid-column: 1;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header h1 {
-        font-size: 1.4em;
-      }
-
-      .header img {
-        align-self: center;
-        margin-top: 10px;
-      }
-
-      .container {
-        padding: 24px 16px;
-        margin: 20px 12px;
-      }
-    }
-
-    /* ===== TABLE ===== */
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 18px;
-      overflow-x: auto;
-      display: block;
+      display: none;
     }
 
     th,
     td {
       border: 1px solid #e5e7eb;
       padding: 8px;
-      text-align: left;
-      font-size: 0.9em;
     }
 
     th {
-      background-color: var(--blue);
-      color: white;
+      background: var(--blue);
+      color: #fff;
     }
 
-    /* ===== PHOTO SECTION ===== */
-    .photo-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .photo-item {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #ccc;
-    }
-
-    .photo-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .photo-item button {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-    }
-
-    /* ===== BUTTON ===== */
     .submit-wrap {
-      display: flex;
-      justify-content: center;
+      text-align: center;
       margin-top: 28px;
     }
 
     .submit-btn {
       background: var(--orange);
-      color: white;
+      color: #fff;
       border: none;
       padding: 12px 30px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 1em;
-      transition: background 0.3s, transform 0.1s;
-      width: 100%;
-      max-width: 220px;
-    }
-
-    .submit-btn:hover {
-      background: var(--orange-dark);
-      transform: translateY(-2px);
     }
 
     .message {
@@ -270,141 +139,148 @@
       font-weight: 600;
     }
 
-    .message.success {
-      background-color: #ecfdf5;
+    .success {
+      background: #ecfdf5;
       color: #065f46;
     }
 
-    .message.error {
-      background-color: #fef2f2;
+    .error {
+      background: #fef2f2;
       color: #991b1b;
     }
 
-    .grade-input {
+    #gradeHint {
+      background: #f3f4f6;
+      border-left: 4px solid var(--orange);
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: #374151;
+      font-size: 0.95em;
+      font-style: italic;
+      display: none;
+      margin-bottom: 10px;
+    }
+
+    /* 🔧 Corrige altura, alinhamento e consistência dos inputs */
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
-      border: 1px solid #d1d5db;
+      margin-top: 6px;
+      border: 1px solid var(--border);
       border-radius: 8px;
+      background-color: #fff;
       font-family: "Inter", "Segoe UI", sans-serif;
       font-size: 0.95em;
       color: #000;
       box-sizing: border-box;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      height: 42px;
+      /* 👈 mantém altura uniforme */
+      line-height: 1.4em;
     }
 
-    .grade-input:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
+    /* 🔧 Corrige o date picker */
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #fff;
+      cursor: pointer;
+      height: 42px;
+    }
+
+    /* 🔧 Campo de notas com setas e incrementos */
+    input[type="number"].spinner {
+      appearance: none;
+      -moz-appearance: textfield;
+      text-align: center;
+      width: 90px;
+      height: 36px;
+    }
+
+    input[type="number"].spinner::-webkit-outer-spin-button,
+    input[type="number"].spinner::-webkit-inner-spin-button {
+      -webkit-appearance: inner-spin-button;
+      opacity: 1;
+      height: 1.2em;
+      cursor: pointer;
+    }
+
+    /* 🔧 Centraliza o input de nota na célula da tabela */
+    td input[type="number"] {
+      display: block;
+      margin: 0 auto;
     }
   </style>
 </head>
 
 <body>
   <div class="header">
-    <h1>Class Report Form</h1>
-    <img id="bindiLogo" alt="Bindi International Logo" style="height:55px; width:auto; object-fit:contain;" />
-
+    <h1>Class Assessment Form</h1>
+    <img id="bindiLogo" />
   </div>
 
   <div class="container">
     <h2>General Information</h2>
     <form id="reportForm">
       <div class="grid">
-        <div>
-          <label>Region *</label>
-          <select id="region" required></select>
-        </div>
-        <div>
-          <label>City *</label>
-          <select id="city" required></select>
-        </div>
-
-        <div>
-          <label>School *</label>
-          <select id="school" required></select>
-        </div>
-        <div>
-          <label>Teacher *</label>
-          <select id="teacher" required></select>
-        </div>
-
-        <div>
-          <label>Date *</label>
-          <input type="date" id="classDate" required />
-        </div>
-        <div>
-          <label>Group *</label>
-          <select id="grade" required></select>
-        </div>
-
-        <div>
-          <label>Subject *</label>
-          <input type="text" id="subject" placeholder="e.g., Science" required />
-        </div>
-
-        <div class="full">
-          <label>General Notes</label>
-          <textarea id="notes" placeholder="Any additional comments..."></textarea>
-        </div>
+        <div><label>Region *</label><select id="region" required></select></div>
+        <div><label>City *</label><select id="city" required></select></div>
+        <div><label>School *</label><select id="school" required></select></div>
+        <div><label>Teacher *</label><select id="teacher" required></select></div>
+        <div><label>Date *</label><input type="date" id="classDate" required /></div>
+        <div><label>Group *</label><select id="grade" required></select></div>
+        <div><label>Subject *</label><select id="subject" required></select></div>
+        <div class="full"><label>General Notes</label><textarea id="notes"></textarea></div>
       </div>
 
-      <h2>Students Attendance</h2>
-      <!-- ===== GRADES QUESTION AREA ===== -->
-      <div id="gradesSection" style="display:none; margin-top:20px;">
-        <label>Do you want to enter grades? *</label>
-        <select id="enterGrades">
-    <option value="">Select</option>
-    <option value="Yes">Yes</option>
-    <option value="No">No</option>
-  </select>
+      <h2>Student Assessment</h2>
+      <p id="gradeHint"></p>
 
-        <div id="gradeTypeContainer" style="display:none; margin-top:15px;">
-          <label>Enter Grade Type *</label>
-          <select id="gradeType">
-      <option value="">Select</option>
-      <option value="Quarterly">Quarterly</option>
-      <option value="Monthly">Monthly</option>
-    </select>
-        </div>
-
-        <div id="quarterContainer" style="display:none; margin-top:15px;">
-          <label>Select Quarter *</label>
-          <select id="quarter">
-      <option value="">Select</option>
-      <option value="Q1">Q1</option>
-      <option value="Q2">Q2</option>
-      <option value="Q3">Q3</option>
-      <option value="Q4">Q4</option>
-    </select>
-        </div>
-
-        <div id="monthContainer" style="display:none; margin-top:15px;">
-          <label>Select Month *</label>
-          <select id="month">
-      <option value="">Select</option>
-      <option value="1">January</option>
-      <option value="2">February</option>
-      <option value="3">March</option>
-      <option value="4">April</option>
-      <option value="5">May</option>
-      <option value="6">June</option>
-      <option value="7">July</option>
-      <option value="8">August</option>
-      <option value="9">September</option>
-      <option value="10">October</option>
-      <option value="11">November</option>
-      <option value="12">December</option>
-    </select>
-        </div>
+      <div>
+        <label>Assessment Type *</label>
+        <select id="gradeType" required>
+          <option value="">Select</option>
+          <option value="Quarterly">Quarterly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
       </div>
 
-      <table id="studentsTable" style="display:none;">
+      <div id="quarterContainer" style="display:none;">
+        <label>Select Quarter *</label>
+        <select id="quarter">
+          <option value="">Select</option>
+          <option value="Q1">Q1 (May - July)</option>
+          <option value="Q2">Q2 (Aug - Oct)</option>
+          <option value="Q3">Q3 (Nov - Jan)</option>
+          <option value="Q4">Q4 (Feb - Mar)</option>
+        </select>
+      </div>
+
+      <div id="monthContainer" style="display:none;">
+        <label>Select Month *</label>
+        <select id="month">
+          <option value="">Select</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+
+      <table id="studentsTable">
         <thead>
           <tr>
             <th>Student Name</th>
-            <th>Attendance</th>
-            <th>Note / Grade</th>
+            <th>Assessment</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -412,377 +288,263 @@
 
       <h2>Upload Class Photos</h2>
       <input type="file" id="photos" accept="image/*" multiple />
-      <div class="photo-list" id="photoList"></div>
-
       <div class="submit-wrap">
         <button type="button" class="submit-btn" id="submitBtn">Submit Report</button>
       </div>
-
-      <div class="message success" id="successMessage">
-        ✅ Report submitted successfully!
-      </div>
+      <div class="message success" id="successMessage">✅ Report submitted successfully!</div>
       <div class="message error" id="errorMessage">❌ Error submitting report.</div>
     </form>
   </div>
 
   <script>
-    // Load Bindi logo dynamically
-google.script.run.withSuccessHandler((url) => {
-  const logoEl = document.getElementById("bindiLogo");
-  if (url) {
-    logoEl.src = url;
-  } else {
-    logoEl.alt = "Logo not found";
-  }
-}).getLogoUrl();
+    // === Funções auxiliares ===
+    function getGradeLimits(type) {
+      if (type === "Quarterly") return { min: 0, max: 25, message: "Please enter a value between 0 and 25 (Quarterly assessment)." };
+      if (type === "Monthly") return { min: 0, max: 20, message: "Please enter a value between 0 and 20 (Monthly assessment)." };
+      return { min: 0, max: 25, message: "" };
+    }
 
+    function validateGrade(el) {
+      const val = parseFloat(el.value);
+      const min = parseFloat(el.min);
+      const max = parseFloat(el.max);
+      if (isNaN(val)) return;
+      if (val < min) el.value = min;
+      if (val > max) el.value = max;
+    }
+
+    function setLoading(el, loading, placeholder = "Loading...") {
+      if (!el) return;
+      if (loading) {
+        el.disabled = true;
+        el.style.opacity = "0.7";
+        el.innerHTML = `<option value="">${placeholder}</option>`;
+      } else {
+        el.disabled = false;
+        el.style.opacity = "1";
+      }
+    }
+
+
+    google.script.run.withSuccessHandler(url => {
+      const logo = document.getElementById("bindiLogo");
+      if (url) logo.src = url;
+    }).getLogoUrl();
+
+    // === Dropdowns ===
     const regionEl = document.getElementById("region");
     const cityEl = document.getElementById("city");
     const schoolEl = document.getElementById("school");
     const teacherEl = document.getElementById("teacher");
-    const studentsTable = document.getElementById("studentsTable");
-    const tbody = studentsTable.querySelector("tbody");
-    const photosInput = document.getElementById("photos");
-    const photoList = document.getElementById("photoList");
-    const submitBtn = document.getElementById("submitBtn");
-    const successMessage = document.getElementById("successMessage");
-    const errorMessage = document.getElementById("errorMessage");
+    const gradeEl = document.getElementById("grade");
+    const subjectEl = document.getElementById("subject");
 
-    // Teacher label
-    const teacherLabel = document.createElement("div");
-    teacherLabel.id = "teacherLabel";
-    teacherLabel.style.fontWeight = "600";
-    teacherLabel.style.color = "#0056b3";
-    teacherLabel.style.marginTop = "20px";
-    teacherLabel.style.marginBottom = "10px";
-    teacherLabel.style.display = "none";
-    teacherLabel.style.fontSize = "1em";
-    studentsTable.parentElement.insertBefore(teacherLabel, studentsTable);
+    const gradeTypeEl = document.getElementById("gradeType");
+    const quarterC = document.getElementById("quarterContainer");
+    const monthC = document.getElementById("monthContainer");
 
-    function setLoading(el, loading, placeholder = "Loading...") {
-      el.disabled = loading;
-      el.innerHTML = loading
-        ? `<option>${placeholder}</option>`
-        : `<option value="">Select</option>`;
-    }
-
-    function fillSelect(el, items, placeholder = "Select") {
-      el.innerHTML = `<option value="">${placeholder}</option>`;
-      (items || []).forEach((item) => {
-        const opt = document.createElement("option");
-        opt.value = item;
-        opt.textContent = item;
-        el.appendChild(opt);
-      });
-      el.disabled = false;
-    }
-
-    // Load regions
-    window.onload = function () {
-      setLoading(regionEl, true);
-      google.script.run
-        .withSuccessHandler((regions) => {
-          if (regions && regions.length > 0) {
-            fillSelect(regionEl, regions, "Select region");
-          } else {
-            regionEl.innerHTML = '<option>No regions found</option>';
-          }
-        })
-        .getRegions();
+    gradeTypeEl.onchange = () => {
+      quarterC.style.display = gradeTypeEl.value === "Quarterly" ? "block" : "none";
+      monthC.style.display = gradeTypeEl.value === "Monthly" ? "block" : "none";
+      const { message } = getGradeLimits(gradeTypeEl.value);
+      const hint = document.getElementById("gradeHint");
+      hint.textContent = message || "";
+      hint.style.display = message ? "block" : "none";
     };
 
-    // Region → City
-    regionEl.addEventListener("change", () => {
-      const region = regionEl.value;
-      if (!region) return;
+    function fillSelect(el, list, placeholder="Select") {
+      el.innerHTML = `<option value="">${placeholder}</option>`;
+      (list||[]).forEach(v => {
+        const o=document.createElement("option"); o.value=v; o.textContent=v; el.appendChild(o);
+      });
+    }
+
+    window.onload = () => {
+      setLoading(regionEl, true);
+      google.script.run.withSuccessHandler(r => {
+        fillSelect(regionEl, r, "Select region");
+        setLoading(regionEl, false);
+      }).getRegions();
+    };
+
+      regionEl.onchange = () => {
       setLoading(cityEl, true);
-      google.script.run
-        .withSuccessHandler((cities) => fillSelect(cityEl, cities, "Select city"))
-        .getCities(region);
-    });
+      google.script.run.withSuccessHandler(c => {
+        fillSelect(cityEl, c, "Select city");
+        setLoading(cityEl, false);
+      }).getCities(regionEl.value);
+    };
 
-    // City → School
-    cityEl.addEventListener("change", () => {
-      const region = regionEl.value;
-      const city = cityEl.value;
-      if (!city) return;
+
+    cityEl.onchange = () => {
       setLoading(schoolEl, true);
-      google.script.run
-        .withSuccessHandler((schools) => fillSelect(schoolEl, schools, "Select school"))
-        .getSchools(region, city);
-    });
-
-// School → Load Teachers and Groups
-schoolEl.addEventListener("change", () => {
-  const region = regionEl.value;
-  const city = cityEl.value;
-  const school = schoolEl.value;
-  if (!school) return;
-
-  // Carrega professores
-  setLoading(teacherEl, true);
-  google.script.run
-    .withSuccessHandler((teachers) => fillSelect(teacherEl, teachers, "Select teacher"))
-    .getTeachers(region, city, school);
-
-  // Carrega grupos
-  const gradeEl = document.getElementById("grade");
-  setLoading(gradeEl, true);
-  google.script.run
-    .withSuccessHandler((groups) => fillSelect(gradeEl, groups, "Select group"))
-    .getGroups(region, city, school);
-});
+      google.script.run.withSuccessHandler(s => {
+        fillSelect(schoolEl, s, "Select school");
+        setLoading(schoolEl, false);
+      }).getSchools(regionEl.value, cityEl.value);
+    };
 
 
+    schoolEl.onchange = () => {
+      const region = regionEl.value, city = cityEl.value, school = schoolEl.value;
+      if (!school) return;
 
-    // Teacher → Students
-    teacherEl.addEventListener("change", () => {
-      const region = regionEl.value;
-      const city = cityEl.value;
-      const school = schoolEl.value;
-      const teacher = teacherEl.value;
+      setLoading(teacherEl, true);
+      setLoading(gradeEl, true);
+      setLoading(subjectEl, true);
 
-      if (!teacher) {
-        studentsTable.style.display = "none";
-        teacherLabel.style.display = "none";
-        return;
-      }
+      google.script.run.withSuccessHandler(t => {
+        fillSelect(teacherEl, t, "Select teacher");
+        setLoading(teacherEl, false);
+      }).getTeachers(region, city, school);
 
-      teacherLabel.textContent = `Teacher: ${teacher}`;
-      teacherLabel.style.display = "block";
-      // Show the Grades Section when teacher is selected
-      const gradesSection = document.getElementById("gradesSection");
-      gradesSection.style.display = "block";
+      google.script.run.withSuccessHandler(g => {
+        fillSelect(gradeEl, g, "Select group");
+        setLoading(gradeEl, false);
+      }).getGroups(region, city, school);
 
-      google.script.run
-        .withSuccessHandler((students) => displayStudents(students))
-        .getStudents(region, city, school, teacher);
-    });
+      google.script.run.withSuccessHandler(subs => {
+        fillSelect(subjectEl, subs, "Select subject");
+        setLoading(subjectEl, false);
+      }).getSubjects(region, city, school);
+    };
 
-    // Group → Load Students
-    document.getElementById("grade").addEventListener("change", () => {
-      const region = regionEl.value;
-      const city = cityEl.value;
-      const school = schoolEl.value;
-      const group = document.getElementById("grade").value;
 
-      if (!group) {
-        studentsTable.style.display = "none";
-        teacherLabel.style.display = "none";
-        return;
-      }
+    // === Carregar alunos ===
+    document.getElementById("grade").onchange = () => {
+      const region=regionEl.value, city=cityEl.value, school=schoolEl.value, group=gradeEl.value;
+      if(!group)return;
+      const table=document.getElementById("studentsTable"), tbody=table.querySelector("tbody");
+      tbody.innerHTML="<tr><td colspan='2'>Loading students...</td></tr>";
+      table.style.display="table";
 
-      teacherLabel.textContent = `Group: ${group}`;
-      teacherLabel.style.display = "block";
+      google.script.run.withSuccessHandler(students => showStudents(students)).getStudents(region,city,school,group);
+    };
 
-      // 🔹 Mostra a seção de notas
-      const gradesSection = document.getElementById("gradesSection");
-      gradesSection.style.display = "block";
+    function showStudents(students){
+      const table=document.getElementById("studentsTable");
+      const tbody=table.querySelector("tbody");
+      tbody.innerHTML="";
+      if(!students.length){table.style.display="none";return;}
+      const {min,max}=getGradeLimits(document.getElementById("gradeType").value);
+      students.forEach(s=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`<td>${s}</td><td><input type="number" class="grade-input spinner" step="0.5" min="${min}" max="${max}" oninput="validateGrade(this)" /></td>`;
+        tbody.appendChild(tr);
+      });
+      table.style.display="table";
+    }
 
-      // 🔹 Carrega alunos do grupo selecionado
-      google.script.run
-        .withSuccessHandler((students) => displayStudents(students))
-        .getStudents(region, city, school, group);
-    });
+    // === Enviar formulário (⚙️ principal correção) ===
+document.getElementById("submitBtn").onclick = async () => {
+  const submitBtn = document.getElementById("submitBtn");
+  const successMsg = document.getElementById("successMessage");
+  const errorMsg = document.getElementById("errorMessage");
 
-    // ===== GRADES LOGIC =====
-    const enterGradesEl = document.getElementById("enterGrades");
-    const gradeTypeContainer = document.getElementById("gradeTypeContainer");
-    const gradeTypeEl = document.getElementById("gradeType");
-    const quarterContainer = document.getElementById("quarterContainer");
-    const monthContainer = document.getElementById("monthContainer");
+  successMsg.style.display = "none";
+  errorMsg.style.display = "none";
 
-    enterGradesEl.addEventListener("change", () => {
-      const value = enterGradesEl.value;
-      if (value === "Yes") {
-        gradeTypeContainer.style.display = "block";
-      } else {
-        gradeTypeContainer.style.display = "none";
-        quarterContainer.style.display = "none";
-        monthContainer.style.display = "none";
-      }
-    });
+  // 🔍 Verifica campos obrigatórios antes do envio
+  const requiredFields = [
+    { id: "region", label: "Region" },
+    { id: "city", label: "City" },
+    { id: "school", label: "School" },
+    { id: "teacher", label: "Teacher" },
+    { id: "classDate", label: "Date" },
+    { id: "grade", label: "Group" },
+    { id: "subject", label: "Subject" },
+    { id: "gradeType", label: "Assessment Type" },
+  ];
 
-    gradeTypeEl.addEventListener("change", () => {
-      const type = gradeTypeEl.value;
-      if (type === "Quarterly") {
-        quarterContainer.style.display = "block";
-        monthContainer.style.display = "none";
-      } else if (type === "Monthly") {
-        monthContainer.style.display = "block";
-        quarterContainer.style.display = "none";
-      } else {
-        quarterContainer.style.display = "none";
-        monthContainer.style.display = "none";
-      }
-    });
+  const missing = requiredFields.filter(f => !document.getElementById(f.id).value);
 
-function displayStudents(students) {
-  tbody.innerHTML = "";
-  if (!students || students.length === 0) {
-    studentsTable.style.display = "none";
+  if (missing.length > 0) {
+    const names = missing.map(f => f.label).join(", ");
+    errorMsg.innerHTML = `⚠️ Please fill all required fields: <b>${names}</b>.`;
+    errorMsg.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Report";
+    window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
-// Atualiza a tabela de alunos quando o professor decide entrar com notas
-document.getElementById("enterGrades").addEventListener("change", () => {
-  if (tbody.children.length > 0) {
-    // Recria a tabela com a nova configuração (com ou sem coluna Grade)
-    const currentStudents = Array.from(tbody.children).map(tr => tr.children[0].textContent);
-    displayStudents(currentStudents);
+
+  // 🔍 Validação adicional: Quarterly ou Monthly requer um campo específico
+  const gradeType = document.getElementById("gradeType").value;
+  if (gradeType === "Quarterly" && !document.getElementById("quarter").value) {
+    errorMsg.innerHTML = `⚠️ Please select the quarter.`;
+    errorMsg.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
   }
-});
+  if (gradeType === "Monthly" && !document.getElementById("month").value) {
+    errorMsg.innerHTML = `⚠️ Please select the month.`;
+    errorMsg.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
 
-  // Verifica se o professor vai entrar com notas
-  const enterGrades = document.getElementById("enterGrades")?.value === "Yes";
+  // ✅ Se tudo estiver preenchido, prossegue normalmente
+  submitBtn.disabled = true;
+  submitBtn.textContent = "⏳ Submitting...";
 
-  // Atualiza o cabeçalho da tabela dinamicamente
-  const thead = studentsTable.querySelector("thead tr");
-  thead.innerHTML = `
-    <th>Student Name</th>
-    <th>Attendance</th>
-    ${enterGrades ? '<th>Grade</th>' : ''}
-  `;
-
-  students.forEach((s) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${s}</td>
-      <td>
-        <select>
-          <option value="Present" selected>Present</option>
-          <option value="Partial Absent">Partial Absent</option>
-          <option value="Absent">Absent</option>
-        </select>
-      </td>
-    ${enterGrades ? '<td><input type="text" placeholder="Enter grade" class="grade-input" /></td>' : ''}
-
-    `;
-    tbody.appendChild(tr);
-  });
-
-  studentsTable.style.display = "table";
-}
-
-
-    // Photo preview & delete
-    photosInput.addEventListener("change", () => {
-      const files = Array.from(photosInput.files);
-      photoList.innerHTML = "";
-      files.forEach((file, i) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement("div");
-          div.className = "photo-item";
-          div.innerHTML = `
-            <img src="${e.target.result}" alt="">
-            <button data-index="${i}">×</button>
-          `;
-          photoList.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    photoList.addEventListener("click", (e) => {
-      const btn = e.target.closest("button");
-      if (!btn) return;
-      const idx = parseInt(btn.dataset.index);
-      const dt = new DataTransfer();
-      Array.from(photosInput.files)
-        .filter((_, i) => i !== idx)
-        .forEach((f) => dt.items.add(f));
-      photosInput.files = dt.files;
-      photosInput.dispatchEvent(new Event("change"));
-    });
-
-
-// Submit form
-submitBtn.addEventListener("click", async () => {
-  const formData = {
+  const data = {
     region: regionEl.value,
     city: cityEl.value,
     school: schoolEl.value,
     teacher: teacherEl.value,
     classDate: document.getElementById("classDate").value,
-    grade: document.getElementById("grade").value,
-    subject: document.getElementById("subject").value,
+    grade: gradeEl.value,
+    subject: subjectEl.value,
     notes: document.getElementById("notes").value,
-    enterGrades: document.getElementById("enterGrades")?.value || "",
-    gradeType: document.getElementById("gradeType")?.value || "",
-    quarter: document.getElementById("quarter")?.value || "",
-    month: document.getElementById("month")?.value || ""
+    gradeType: gradeType,
+    quarter: document.getElementById("quarter").value,
+    month: document.getElementById("month").value
   };
 
-  const enterGrades = document.getElementById("enterGrades")?.value === "Yes";
-  const gradeType = document.getElementById("gradeType")?.value;
-
-  // Validação obrigatória de Quarter / Month
-  if (enterGrades) {
-    if (gradeType === "Quarterly" && !formData.quarter) {
-      alert("⚠️ Please select a Quarter before submitting.");
-      return;
-    }
-    if (gradeType === "Monthly" && !formData.month) {
-      alert("⚠️ Please select a Month before submitting.");
-      return;
-    }
-  }
-
-  const students = Array.from(tbody.children).map((tr) => {
-    const tds = tr.querySelectorAll("td");
-    const nameCell = tds[0]?.textContent?.trim() || "";
-    const attendanceSelect = tds[1]?.querySelector("select");
-    const gradeInput = enterGrades ? tds[2]?.querySelector("input") : null;
-
-    return {
-      name: nameCell,
-      present: attendanceSelect ? attendanceSelect.value : "",
-      grade: gradeInput ? gradeInput.value : ""
-    };
-  });
+  const students = Array.from(document.querySelectorAll("#studentsTable tbody tr")).map(tr => ({
+    name: tr.children[0].textContent.trim(),
+    grade: tr.children[1].querySelector("input").value
+  }));
 
   const photos = await Promise.all(
-    Array.from(photosInput.files).map(
-      (file) =>
-        new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve({ name: file.name, data: e.target.result });
-          reader.readAsDataURL(file);
-        })
+    Array.from(document.getElementById("photos").files).map(f =>
+      new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res({ name: f.name, data: e.target.result });
+        r.readAsDataURL(f);
+      })
     )
   );
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
-
   google.script.run
-    .withSuccessHandler((res) => {
+    .withSuccessHandler(r => {
       submitBtn.disabled = false;
       submitBtn.textContent = "Submit Report";
 
-      if (res.success) {
-        successMessage.style.display = "block";
-        errorMessage.style.display = "none";
-        document.getElementById("reportForm").reset();
-        teacherLabel.style.display = "none";
-        studentsTable.style.display = "none";
-        photoList.innerHTML = "";
-        setTimeout(() => {
-          successMessage.style.display = "none";
-        }, 4000);
+      if (r && r.success) {
+        successMsg.textContent = "✅ Report submitted successfully!";
+        successMsg.style.display = "block";
+        errorMsg.style.display = "none";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        setTimeout(() => location.reload(), 2000);
       } else {
-        errorMessage.style.display = "block";
-        successMessage.style.display = "none";
+        errorMsg.textContent = r.message || "❌ Error submitting report.";
+        errorMsg.style.display = "block";
+        successMsg.style.display = "none";
       }
     })
-    .withFailureHandler(() => {
+    .withFailureHandler(err => {
+      console.error("❌ Submit error:", err);
       submitBtn.disabled = false;
       submitBtn.textContent = "Submit Report";
-      errorMessage.style.display = "block";
-      successMessage.style.display = "none";
+      errorMsg.textContent = "❌ Network or server error.";
+      errorMsg.style.display = "block";
+      successMsg.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     })
-    .submitForm(formData, photos, students);
-});
+    .submitForm(data, photos, students);
+};
 
   </script>
 </body>
