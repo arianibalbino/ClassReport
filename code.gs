@@ -115,156 +115,103 @@ function getStudents(region, city, school, group) {
 // ============================================================
 function submitForm(formData, photos, students) {
   try {
-    const { region, city, school, teacher, classDate, grade, subject, notes, enterGrades, gradeType, quarter, month } = formData;
+    const { region, city, school, teacher, classDate, grade, subject, notes, gradeType, quarter, month } = formData;
 
-    // === Folder structure: Reports → Region → City → School → Week ===
+    // 📁 Estrutura de pastas
     const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
     const reportsFolder = getOrCreateSubFolder(root, 'Reports');
     const regionFolder = getOrCreateSubFolder(reportsFolder, region);
     const cityFolder = getOrCreateSubFolder(regionFolder, city);
     const schoolFolder = getOrCreateSubFolder(cityFolder, school);
 
-    // === Week folder ===
     const dateObj = new Date(classDate || new Date());
     const week = getWeekNumber(dateObj);
     const year = dateObj.getFullYear();
-    const weekFolderName = `${year}-W${week}`;
-    const weekFolder = getOrCreateSubFolder(schoolFolder, weekFolderName);
+    const weekFolder = getOrCreateSubFolder(schoolFolder, `${year}-W${week}`);
 
-    // === Weekly report file ===
-    const reportName = `Report_${school.replace(/\s+/g, '')}_W${week}`;
-    const existingFiles = weekFolder.getFilesByName(reportName);
-    let ss;
-    if (existingFiles.hasNext()) {
-      ss = SpreadsheetApp.open(existingFiles.next());
-    } else {
-      ss = SpreadsheetApp.create(reportName);
-      DriveApp.getFileById(ss.getId()).moveTo(weekFolder);
+    const reportName = `Assessment_Report_${school.replace(/\s+/g, '')}_W${week}`;
+    const existing = weekFolder.getFilesByName(reportName);
+    const ss = existing.hasNext() ? SpreadsheetApp.open(existing.next()) : SpreadsheetApp.create(reportName);
+    DriveApp.getFileById(ss.getId()).moveTo(weekFolder);
+
+    // 📊 Nome da aba = Professor + Matéria
+    const sheetName = `${teacher}_${subject}`;
+    let sh = ss.getSheetByName(sheetName);
+
+    if (!sh) {
+      sh = ss.insertSheet(sheetName);
+      const headers = [
+        'Date', 'Region', 'City', 'School', 'Class/Grade', 'Subject',
+        'Assessment Type', 'Quarter/Month', 'General Notes',
+        'Student Name', 'Assessment', 'Photo Links'
+      ];
+      sh.getRange(1, 1, 1, headers.length).setValues([headers]);
+      sh.getRange(1, 1, 1, headers.length).setFontWeight('bold').setHorizontalAlignment('center');
     }
 
-    // === Sheet name (date + teacher), overwrite allowed ===
-    const sheetName = `${classDate}_${teacher}`;
-    let sh = ss.getSheetByName(sheetName);
-    if (sh) ss.deleteSheet(sh);
-    sh = ss.insertSheet(sheetName);
-
-    // === Headers ===
-const headers = [
-  'Date', 'Region', 'City', 'School', 'Class/Grade', 'Subject',
-   'General Notes', 'Student Name', 'Attendance',
-   'Grade', 'Photo Links'
-];
-
-
-    sh.getRange(1, 1, 1, headers.length).setValues([headers]);
-
-    // Format header: bold + center + background
-    const headerRange = sh.getRange(1, 1, 1, headers.length);
-    headerRange.setFontWeight('bold');
-    headerRange.setHorizontalAlignment('center');
-    headerRange.setBackground('#f1f3f4');
-
-    // === Save photos and make them public ===
+    // 📸 Upload das fotos
     const photoLinks = [];
-    if (photos && photos.length > 0) {
+    if (photos && photos.length) {
       const photosFolder = getOrCreateSubFolder(weekFolder, 'Photos');
-      const dateFolder = getOrCreateSubFolder(
-        photosFolder,
-        classDate || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd")
-      );
-
-      photos.forEach((p, i) => {
+      const dateFolder = getOrCreateSubFolder(photosFolder, classDate);
+      photos.forEach(p => {
         try {
-          const match = String(p.data).match(/^data:(.+);base64,(.*)$/);
-          const contentType = match ? match[1] : 'image/jpeg';
-          const bytes = Utilities.base64Decode(match ? match[2] : p.data.split(',')[1]);
-          const blob = Utilities.newBlob(bytes, contentType, p.name || `photo_${i + 1}.jpg`);
-          const file = dateFolder.createFile(blob);
+          const bytes = Utilities.base64Decode(p.data.split(',')[1]);
+          const file = dateFolder.createFile(Utilities.newBlob(bytes, 'image/jpeg', p.name));
           file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-          photoLinks.push({ name: `Photo ${i + 1}`, url: file.getUrl() });
-        } catch (err) {
-          Logger.log('❌ Error saving photo: ' + err);
+          photoLinks.push({ name: p.name, url: file.getUrl() });
+        } catch (e) {
+          Logger.log("⚠️ Error saving photo " + p.name + ": " + e);
         }
       });
     }
 
-    // === Insert student data ===
-const rows = students.map(st => [
-  classDate,
-  region,
-  city,
-  school,
-  grade,
-  subject,
-  notes,
-  st.name,
-  st.present,
-  st.grade || '',
-  ''
-]);
+    // 🧮 Determina período
+    const period = gradeType === "Quarterly" ? quarter : month;
 
+    // 🧾 Linhas novas (agora incluindo turma/grade)
+    const rows = (students && students.length > 0)
+      ? students.map(s => [
+          classDate, region, city, school, grade, subject,
+          gradeType, period, notes, s.name, s.grade, photoLinks.length ? photoLinks[0].url : ''
+        ])
+      : [[classDate, region, city, school, grade, subject, gradeType, period, notes, '', '', '']];
 
+    Logger.log(`📋 ${rows.length} rows ready to append in ${sheetName}`);
 
-    if (rows.length > 0) {
-      sh.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
+    // 🔄 Adiciona as novas linhas no final (sem sobrescrever)
+    const lastRow = sh.getLastRow();
+    sh.getRange(lastRow + 1, 1, rows.length, rows[0].length).setValues(rows);
 
-      // === Add RichText clickable links ===
-      if (photoLinks.length > 0) {
-        for (let i = 0; i < rows.length; i++) {
-          const builder = SpreadsheetApp.newRichTextValue();
-          const textParts = [];
-          const linkParts = [];
+    // ✨ Formatação automática e alinhamento
+    const totalCols = sh.getLastColumn();
+    const totalRows = sh.getLastRow();
 
-          photoLinks.forEach((p, idx) => {
-            if (idx > 0) {
-              textParts.push('\n'); // new line between links
-              linkParts.push(null);
-            }
-            textParts.push(p.name);
-            linkParts.push(p.url);
-          });
+    // Auto-ajusta a largura de todas as colunas (como “Ajustar ao texto”)
+    sh.autoResizeColumns(1, totalCols);
 
-          const fullText = textParts.join('');
-          builder.setText(fullText);
+    // Define o alinhamento à esquerda (inclusive cabeçalhos)
+    sh.getRange(1, 1, totalRows, totalCols).setHorizontalAlignment('left');
 
-          let cursor = 0;
-          textParts.forEach((txt, j) => {
-            if (linkParts[j]) {
-              builder.setLinkUrl(cursor, cursor + txt.length, linkParts[j]);
-            }
-            cursor += txt.length;
-          });
-
-          const richValue = builder.build();
-          const cell = sh.getRange(i + 2, 12);
-          cell.setRichTextValue(richValue);
-          cell.setWrap(true);
-          sh.setRowHeight(i + 2, 45);
-        }
-      }
-    }
-
-    // === Auto fit columns ===
-    sh.autoResizeColumns(1, headers.length);
-
-    // === Freeze header row ===
+    // Congela a primeira linha (cabeçalho)
     sh.setFrozenRows(1);
-    // === Generate both reports automatically (without breaking existing logic) ===
-    try {
-      generateAttendanceReport(schoolFolder);
-      generateGradesReport(schoolFolder);
-    } catch (err) {
-      Logger.log("⚠️ Could not generate reports automatically: " + err);
+
+
+    // 🔍 Adiciona filtros automáticos (somente 1x)
+    if (!sh.getFilter()) {
+      const dataRange = sh.getDataRange();
+      sh.getRange(1, 1, dataRange.getNumRows(), dataRange.getNumColumns()).createFilter();
+      Logger.log(`✅ Filter added to sheet ${sheetName}`);
     }
 
-    return { success: true, message: '✅ Report submitted successfully!' };
+    Logger.log(`✅ Data successfully appended to ${sheetName}`);
+    return { success: true };
 
-  } catch (err) {
-    Logger.log('❌ submitForm error: ' + err);
-    return { success: false, message: '❌ Error: ' + err.message };
+  } catch (e) {
+    Logger.log("❌ submitForm error: " + e);
+    return { success: false, message: e.message };
   }
 }
-
 
 
 
@@ -431,4 +378,27 @@ function generateGradesReport(schoolFolder) {
     Logger.log("❌ generateGradesReport error: " + err);
   }
 }
+
+function getSubjects(region, city, school) {
+  try {
+    const ss = openSchoolSheet(region, city, school);
+    if (!ss) return [];
+
+    const subjSheet = ss.getSheetByName("Subjects");
+    if (!subjSheet) {
+      Logger.log(`❌ No "Subjects" tab found in ${school}`);
+      return [];
+    }
+
+    const data = subjSheet.getRange(2, 1, subjSheet.getLastRow() - 1, 1).getValues();
+    const subjects = data.flat().filter(v => v && v.toString().trim() !== "");
+    Logger.log(`✅ Subjects for ${school}: ${subjects}`);
+    return subjects;
+  } catch (err) {
+    Logger.log("❌ getSubjects error: " + err);
+    return [];
+  }
+}
+
+
 
