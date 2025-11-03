@@ -1,158 +1,790 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Class Form</title>
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        margin: 30px;
-        background: #fafafa;
-        color: #333;
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <base target="_top" />
+  <title>Class Report Form</title>
+  <style>
+    :root {
+      --blue: #0056b3;
+      --orange: #ff7b00;
+      --orange-dark: #e36d00;
+      --gray-bg: #f8fafc;
+      --border: #d1d5db;
+    }
+
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background-color: var(--gray-bg);
+      margin: 0;
+      color: #111827;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 14px 20px;
+      border-bottom: 3px solid var(--orange);
+      flex-wrap: wrap;
+    }
+
+    .header h1 {
+      color: var(--blue);
+      font-size: 1.6em;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .header img {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+      margin-top: 8px;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1200px;
+      /* 🔹 mais largo no desktop */
+      width: 95%;
+      /* 🔹 usa até 95% da tela */
+      background-color: #fff;
+      margin: 40px auto;
+      padding: 40px 48px;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* 🔸 layout ajustável em telas menores */
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 24px;
+        margin: 20px auto;
       }
 
-      h2 {
-        text-align: center;
-        color: #5a2d82;
+      .grid {
+        grid-template-columns: 1fr;
+        /* 🔹 empilha campos no celular */
+      }
+    }
+
+
+    h2 {
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    h2::before {
+      content: "▍";
+      color: var(--blue);
+      margin-right: 8px;
+      font-size: 1.4em;
+    }
+
+    /* ===== FORM FIELDS ===== */
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 600;
+      font-size: 0.95em;
+      color: #1f2937;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: #fff;
+      font-family: "Inter", "Segoe UI", sans-serif !important;
+      font-size: 0.95em;
+      color: #000;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
+    }
+
+    input[type="date"] {
+      padding-right: 6px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* ===== GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .full {
+      grid-column: 1 / 3;
+    }
+
+    /* RESPONSIVE GRID */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
 
-      form {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        max-width: 700px;
-        margin: 0 auto;
+      .full {
+        grid-column: 1;
       }
 
-      label {
-        display: block;
-        margin-top: 12px;
-        font-weight: 600;
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      input, select, textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 6px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
+      .header h1 {
+        font-size: 1.4em;
       }
 
-      input:focus, textarea:focus {
-        outline: none;
-        border-color: #6c2bd9;
-        box-shadow: 0 0 4px rgba(108,43,217,0.3);
+      .header img {
+        align-self: center;
+        margin-top: 10px;
       }
 
-      button {
-        background-color: #6c2bd9;
-        color: white;
-        border: none;
-        padding: 10px 18px;
-        border-radius: 8px;
-        margin-top: 20px;
-        cursor: pointer;
-        font-size: 15px;
+      .container {
+        padding: 24px 16px;
+        margin: 20px 12px;
       }
+    }
 
-      button:hover {
-        background-color: #5a22b0;
-      }
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      overflow-x: auto;
+      display: block;
+    }
 
-      .student-entry {
-        background: #f7f4fc;
-        padding: 10px;
-        margin-top: 8px;
-        border-radius: 10px;
-      }
-    </style>
-  </head>
+    th,
+    td {
+      border: 1px solid #e5e7eb;
+      padding: 8px;
+      text-align: left;
+      font-size: 0.9em;
+    }
 
-  <body>
-    <h2>📘 Class Record</h2>
-    <form id="lessonForm">
-      <label for="classDate">📅 Class Date:</label>
-      <input type="date" id="classDate" name="classDate" required>
+    th {
+      background-color: var(--blue);
+      color: white;
+    }
 
-      <label for="teacher">👩‍🏫 Teacher:</label>
-      <input type="text" id="teacher" name="teacher" required>
+    /* ===== PHOTO SECTION ===== */
+    .photo-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
 
-     <label for="school">🏫 School:</label>
-      <select id="school" name="school" required>
-        <option value="" disabled selected>Select a school</option>
-        <option value="Butterfly Secondary School">Butterfly Secondary School</option>
-        <option value="Rising Sun Elementary">Rising Sun Elementary</option>
-        <option value="Blue Lake Middle School">Blue Lake Middle School</option>
-        <option value="Evergreen Academy">Evergreen Academy</option>
-        <option value="Golden Valley High">Golden Valley High</option>
-      </select>
+    .photo-item {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+    }
 
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-      <label for="grade">📚 Class/Grade:</label>
-      <input type="text" id="grade" name="grade" required>
+    .photo-item button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+    }
 
-      <label for="subject">🧠 Subject:</label>
-      <input type="text" id="subject" name="subject" required>
+    /* ===== BUTTON ===== */
+    .submit-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
 
-      <label for="content">📝 Class content:</label>
-      <textarea id="content" name="content" rows="3" required></textarea>
+    .submit-btn {
+      background: var(--orange);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1em;
+      transition: background 0.3s, transform 0.1s;
+      width: 100%;
+      max-width: 220px;
+    }
 
-      <label for="numStudents">👨‍👩‍👧‍👦 Student attendance:</label>
-      <input type="number" id="numStudents" name="numStudents" min="0" required>
+    .submit-btn:hover {
+      background: var(--orange-dark);
+      transform: translateY(-2px);
+    }
 
-      <div id="studentsContainer"></div>
+    .message {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
 
-      <label for="notes">💬 Student observations:</label>
-      <textarea id="notes" name="notes" rows="3"></textarea>
+    .message.success {
+      background-color: #ecfdf5;
+      color: #065f46;
+    }
 
-      <label for="photoUpload">📷 Upload photos:</label>
-      <input type="file" id="photoUpload" name="photoUpload" accept="image/*" multiple>
+    .message.error {
+      background-color: #fef2f2;
+      color: #991b1b;
+    }
 
-      <button type="submit">Send form</button>
+    .grade-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      font-size: 0.95em;
+      color: #000;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .grade-input:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>Class Report Form</h1>
+    <img id="bindiLogo" alt="Bindi International Logo" style="height:55px; width:auto; object-fit:contain;" />
+
+  </div>
+
+  <div class="container">
+    <h2>General Information</h2>
+    <form id="reportForm">
+      <div class="grid">
+        <div>
+          <label>Region *</label>
+          <select id="region" required></select>
+        </div>
+        <div>
+          <label>City *</label>
+          <select id="city" required></select>
+        </div>
+
+        <div>
+          <label>School *</label>
+          <select id="school" required></select>
+        </div>
+        <div>
+          <label>Teacher *</label>
+          <select id="teacher" required></select>
+        </div>
+
+        <div>
+          <label>Date *</label>
+          <input type="date" id="classDate" required />
+        </div>
+        <div>
+          <label>Group *</label>
+          <select id="grade" required></select>
+        </div>
+
+        <div>
+          <label>Subject *</label>
+          <input type="text" id="subject" placeholder="e.g., Science" required />
+        </div>
+
+        <div class="full">
+          <label>General Notes</label>
+          <textarea id="notes" placeholder="Any additional comments..."></textarea>
+        </div>
+      </div>
+
+      <h2>Students Attendance</h2>
+      <!-- ===== GRADES QUESTION AREA ===== -->
+      <div id="gradesSection" style="display:none; margin-top:20px;">
+        <label>Do you want to enter grades? *</label>
+        <select id="enterGrades">
+    <option value="">Select</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+
+        <div id="gradeTypeContainer" style="display:none; margin-top:15px;">
+          <label>Enter Grade Type *</label>
+          <select id="gradeType">
+      <option value="">Select</option>
+      <option value="Quarterly">Quarterly</option>
+      <option value="Monthly">Monthly</option>
+    </select>
+        </div>
+
+        <div id="quarterContainer" style="display:none; margin-top:15px;">
+          <label>Select Quarter *</label>
+          <select id="quarter">
+      <option value="">Select</option>
+      <option value="Q1">Q1</option>
+      <option value="Q2">Q2</option>
+      <option value="Q3">Q3</option>
+      <option value="Q4">Q4</option>
+    </select>
+        </div>
+
+        <div id="monthContainer" style="display:none; margin-top:15px;">
+          <label>Select Month *</label>
+          <select id="month">
+      <option value="">Select</option>
+      <option value="1">January</option>
+      <option value="2">February</option>
+      <option value="3">March</option>
+      <option value="4">April</option>
+      <option value="5">May</option>
+      <option value="6">June</option>
+      <option value="7">July</option>
+      <option value="8">August</option>
+      <option value="9">September</option>
+      <option value="10">October</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
+    </select>
+        </div>
+      </div>
+
+      <table id="studentsTable" style="display:none;">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Attendance</th>
+            <th>Note / Grade</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>Upload Class Photos</h2>
+      <input type="file" id="photos" accept="image/*" multiple />
+      <div class="photo-list" id="photoList"></div>
+
+      <div class="submit-wrap">
+        <button type="button" class="submit-btn" id="submitBtn">Submit Report</button>
+      </div>
+
+      <div class="message success" id="successMessage">
+        ✅ Report submitted successfully!
+      </div>
+      <div class="message error" id="errorMessage">❌ Error submitting report.</div>
     </form>
+  </div>
 
-    <script>
-      const form = document.getElementById('lessonForm');
-      const studentsContainer = document.getElementById('studentsContainer');
-      const numStudentsInput = document.getElementById('numStudents');
+  <script>
+    // Load Bindi logo dynamically
+google.script.run.withSuccessHandler((url) => {
+  const logoEl = document.getElementById("bindiLogo");
+  if (url) {
+    logoEl.src = url;
+  } else {
+    logoEl.alt = "Logo not found";
+  }
+}).getLogoUrl();
 
-      // Creates dynamic fields according to number of students
-      numStudentsInput.addEventListener('change', () => {
-        studentsContainer.innerHTML = '';
-        const count = parseInt(numStudentsInput.value || 0);
-        for (let i = 1; i <= count; i++) {
-          const div = document.createElement('div');
-          div.className = 'student-entry';
+    const regionEl = document.getElementById("region");
+    const cityEl = document.getElementById("city");
+    const schoolEl = document.getElementById("school");
+    const teacherEl = document.getElementById("teacher");
+    const studentsTable = document.getElementById("studentsTable");
+    const tbody = studentsTable.querySelector("tbody");
+    const photosInput = document.getElementById("photos");
+    const photoList = document.getElementById("photoList");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
+
+    // Teacher label
+    const teacherLabel = document.createElement("div");
+    teacherLabel.id = "teacherLabel";
+    teacherLabel.style.fontWeight = "600";
+    teacherLabel.style.color = "#0056b3";
+    teacherLabel.style.marginTop = "20px";
+    teacherLabel.style.marginBottom = "10px";
+    teacherLabel.style.display = "none";
+    teacherLabel.style.fontSize = "1em";
+    studentsTable.parentElement.insertBefore(teacherLabel, studentsTable);
+
+    function setLoading(el, loading, placeholder = "Loading...") {
+      el.disabled = loading;
+      el.innerHTML = loading
+        ? `<option>${placeholder}</option>`
+        : `<option value="">Select</option>`;
+    }
+
+    function fillSelect(el, items, placeholder = "Select") {
+      el.innerHTML = `<option value="">${placeholder}</option>`;
+      (items || []).forEach((item) => {
+        const opt = document.createElement("option");
+        opt.value = item;
+        opt.textContent = item;
+        el.appendChild(opt);
+      });
+      el.disabled = false;
+    }
+
+    // Load regions
+    window.onload = function () {
+      setLoading(regionEl, true);
+      google.script.run
+        .withSuccessHandler((regions) => {
+          if (regions && regions.length > 0) {
+            fillSelect(regionEl, regions, "Select region");
+          } else {
+            regionEl.innerHTML = '<option>No regions found</option>';
+          }
+        })
+        .getRegions();
+    };
+
+    // Region → City
+    regionEl.addEventListener("change", () => {
+      const region = regionEl.value;
+      if (!region) return;
+      setLoading(cityEl, true);
+      google.script.run
+        .withSuccessHandler((cities) => fillSelect(cityEl, cities, "Select city"))
+        .getCities(region);
+    });
+
+    // City → School
+    cityEl.addEventListener("change", () => {
+      const region = regionEl.value;
+      const city = cityEl.value;
+      if (!city) return;
+      setLoading(schoolEl, true);
+      google.script.run
+        .withSuccessHandler((schools) => fillSelect(schoolEl, schools, "Select school"))
+        .getSchools(region, city);
+    });
+
+// School → Load Teachers and Groups
+schoolEl.addEventListener("change", () => {
+  const region = regionEl.value;
+  const city = cityEl.value;
+  const school = schoolEl.value;
+  if (!school) return;
+
+  // Carrega professores
+  setLoading(teacherEl, true);
+  google.script.run
+    .withSuccessHandler((teachers) => fillSelect(teacherEl, teachers, "Select teacher"))
+    .getTeachers(region, city, school);
+
+  // Carrega grupos
+  const gradeEl = document.getElementById("grade");
+  setLoading(gradeEl, true);
+  google.script.run
+    .withSuccessHandler((groups) => fillSelect(gradeEl, groups, "Select group"))
+    .getGroups(region, city, school);
+});
+
+
+
+    // Teacher → Students
+    teacherEl.addEventListener("change", () => {
+      const region = regionEl.value;
+      const city = cityEl.value;
+      const school = schoolEl.value;
+      const teacher = teacherEl.value;
+
+      if (!teacher) {
+        studentsTable.style.display = "none";
+        teacherLabel.style.display = "none";
+        return;
+      }
+
+      teacherLabel.textContent = `Teacher: ${teacher}`;
+      teacherLabel.style.display = "block";
+      // Show the Grades Section when teacher is selected
+      const gradesSection = document.getElementById("gradesSection");
+      gradesSection.style.display = "block";
+
+      google.script.run
+        .withSuccessHandler((students) => displayStudents(students))
+        .getStudents(region, city, school, teacher);
+    });
+
+    // Group → Load Students
+    document.getElementById("grade").addEventListener("change", () => {
+      const region = regionEl.value;
+      const city = cityEl.value;
+      const school = schoolEl.value;
+      const group = document.getElementById("grade").value;
+
+      if (!group) {
+        studentsTable.style.display = "none";
+        teacherLabel.style.display = "none";
+        return;
+      }
+
+      teacherLabel.textContent = `Group: ${group}`;
+      teacherLabel.style.display = "block";
+
+      // 🔹 Mostra a seção de notas
+      const gradesSection = document.getElementById("gradesSection");
+      gradesSection.style.display = "block";
+
+      // 🔹 Carrega alunos do grupo selecionado
+      google.script.run
+        .withSuccessHandler((students) => displayStudents(students))
+        .getStudents(region, city, school, group);
+    });
+
+    // ===== GRADES LOGIC =====
+    const enterGradesEl = document.getElementById("enterGrades");
+    const gradeTypeContainer = document.getElementById("gradeTypeContainer");
+    const gradeTypeEl = document.getElementById("gradeType");
+    const quarterContainer = document.getElementById("quarterContainer");
+    const monthContainer = document.getElementById("monthContainer");
+
+    enterGradesEl.addEventListener("change", () => {
+      const value = enterGradesEl.value;
+      if (value === "Yes") {
+        gradeTypeContainer.style.display = "block";
+      } else {
+        gradeTypeContainer.style.display = "none";
+        quarterContainer.style.display = "none";
+        monthContainer.style.display = "none";
+      }
+    });
+
+    gradeTypeEl.addEventListener("change", () => {
+      const type = gradeTypeEl.value;
+      if (type === "Quarterly") {
+        quarterContainer.style.display = "block";
+        monthContainer.style.display = "none";
+      } else if (type === "Monthly") {
+        monthContainer.style.display = "block";
+        quarterContainer.style.display = "none";
+      } else {
+        quarterContainer.style.display = "none";
+        monthContainer.style.display = "none";
+      }
+    });
+
+function displayStudents(students) {
+  tbody.innerHTML = "";
+  if (!students || students.length === 0) {
+    studentsTable.style.display = "none";
+    return;
+  }
+// Atualiza a tabela de alunos quando o professor decide entrar com notas
+document.getElementById("enterGrades").addEventListener("change", () => {
+  if (tbody.children.length > 0) {
+    // Recria a tabela com a nova configuração (com ou sem coluna Grade)
+    const currentStudents = Array.from(tbody.children).map(tr => tr.children[0].textContent);
+    displayStudents(currentStudents);
+  }
+});
+
+  // Verifica se o professor vai entrar com notas
+  const enterGrades = document.getElementById("enterGrades")?.value === "Yes";
+
+  // Atualiza o cabeçalho da tabela dinamicamente
+  const thead = studentsTable.querySelector("thead tr");
+  thead.innerHTML = `
+    <th>Student Name</th>
+    <th>Attendance</th>
+    ${enterGrades ? '<th>Grade</th>' : ''}
+  `;
+
+  students.forEach((s) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${s}</td>
+      <td>
+        <select>
+          <option value="Present" selected>Present</option>
+          <option value="Partial Absent">Partial Absent</option>
+          <option value="Absent">Absent</option>
+        </select>
+      </td>
+    ${enterGrades ? '<td><input type="text" placeholder="Enter grade" class="grade-input" /></td>' : ''}
+
+    `;
+    tbody.appendChild(tr);
+  });
+
+  studentsTable.style.display = "table";
+}
+
+
+    // Photo preview & delete
+    photosInput.addEventListener("change", () => {
+      const files = Array.from(photosInput.files);
+      photoList.innerHTML = "";
+      files.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement("div");
+          div.className = "photo-item";
           div.innerHTML = `
-            <label>Student ${i} - Name:</label>
-            <input type="text" name="studentName${i}" required>
-            <label>Attendance:</label>
-            <select name="studentPresent${i}">
-              <option value="Present">Present</option>
-              <option value="Partial absent">Partial absent</option>
-            </select>
-            <label>Observations:</label>
-            <textarea name="studentNote${i}" rows="2"></textarea>
+            <img src="${e.target.result}" alt="">
+            <button data-index="${i}">×</button>
           `;
-          studentsContainer.appendChild(div);
-        }
+          photoList.appendChild(div);
+        };
+        reader.readAsDataURL(file);
       });
+    });
 
-      // Form submission
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
+    photoList.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.index);
+      const dt = new DataTransfer();
+      Array.from(photosInput.files)
+        .filter((_, i) => i !== idx)
+        .forEach((f) => dt.items.add(f));
+      photosInput.files = dt.files;
+      photosInput.dispatchEvent(new Event("change"));
+    });
 
-        // Converts fields to object
-        const data = Object.fromEntries(formData.entries());
 
-        google.script.run
-          .withSuccessHandler(msg => alert(msg))
-          .withFailureHandler(err => alert('Error: ' + err))
-          .submitForm(data);
-      });
-    </script>
-  </body>
+// Submit form
+submitBtn.addEventListener("click", async () => {
+  const formData = {
+    region: regionEl.value,
+    city: cityEl.value,
+    school: schoolEl.value,
+    teacher: teacherEl.value,
+    classDate: document.getElementById("classDate").value,
+    grade: document.getElementById("grade").value,
+    subject: document.getElementById("subject").value,
+    notes: document.getElementById("notes").value,
+    enterGrades: document.getElementById("enterGrades")?.value || "",
+    gradeType: document.getElementById("gradeType")?.value || "",
+    quarter: document.getElementById("quarter")?.value || "",
+    month: document.getElementById("month")?.value || ""
+  };
+
+  const enterGrades = document.getElementById("enterGrades")?.value === "Yes";
+  const gradeType = document.getElementById("gradeType")?.value;
+
+  // Validação obrigatória de Quarter / Month
+  if (enterGrades) {
+    if (gradeType === "Quarterly" && !formData.quarter) {
+      alert("⚠️ Please select a Quarter before submitting.");
+      return;
+    }
+    if (gradeType === "Monthly" && !formData.month) {
+      alert("⚠️ Please select a Month before submitting.");
+      return;
+    }
+  }
+
+  const students = Array.from(tbody.children).map((tr) => {
+    const tds = tr.querySelectorAll("td");
+    const nameCell = tds[0]?.textContent?.trim() || "";
+    const attendanceSelect = tds[1]?.querySelector("select");
+    const gradeInput = enterGrades ? tds[2]?.querySelector("input") : null;
+
+    return {
+      name: nameCell,
+      present: attendanceSelect ? attendanceSelect.value : "",
+      grade: gradeInput ? gradeInput.value : ""
+    };
+  });
+
+  const photos = await Promise.all(
+    Array.from(photosInput.files).map(
+      (file) =>
+        new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve({ name: file.name, data: e.target.result });
+          reader.readAsDataURL(file);
+        })
+    )
+  );
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Report";
+
+      if (res.success) {
+        successMessage.style.display = "block";
+        errorMessage.style.display = "none";
+        document.getElementById("reportForm").reset();
+        teacherLabel.style.display = "none";
+        studentsTable.style.display = "none";
+        photoList.innerHTML = "";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 4000);
+      } else {
+        errorMessage.style.display = "block";
+        successMessage.style.display = "none";
+      }
+    })
+    .withFailureHandler(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Report";
+      errorMessage.style.display = "block";
+      successMessage.style.display = "none";
+    })
+    .submitForm(formData, photos, students);
+});
+
+  </script>
+</body>
+
 </html>
